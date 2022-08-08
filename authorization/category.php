@@ -1,9 +1,9 @@
 <?php
 include_once 'db.php';
 include_once 'func.php';
-$sql = "SELECT role FROM user WHERE id =".$_GET['id'];
 $result = $conn->query($sql);
 $result = $result->fetch_all(MYSQLI_ASSOC);
+$sql = "SELECT role FROM user WHERE id =".$_GET['id'];
 foreach ($result as $role){
     if ($role['role'] === 'admin'){
         echo '<form>
