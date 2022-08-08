@@ -11,6 +11,7 @@ function de($data)
     exit();
 }
 
+de($_GET);
 if (empty($_GET)) {
 
     echo '<form>';
@@ -71,31 +72,34 @@ if (!empty($_GET['city'])) {
 
 
 }
-if (isset($_GET['hiddenCity'])) {
+if (isset($_GET['hiddenCity']) && empty($_GET['addCountry'])) {
     $enCodCountry = explode('=', $_GET['hiddenCountry']);
     $country = [];
     $country[] = $enCodCountry[1];
     $urlCountry = http_build_query($country);
     $allCity = [];
-    if (stristr($_GET['hiddenCity'],'&')!==FALSE){
+    if (stristr($_GET['hiddenCity'], '&') !== FALSE) {
         $oldCity = explode('&', $_GET['hiddenCity']);
-        foreach ($oldCity as $citi){
-            $oneCity = explode('=',$citi);
+        foreach ($oldCity as $citi) {
+            $oneCity = explode('=', $citi);
             $allCity[] = $oneCity[1];
         }
 //            de($allCity);
         array_push($allCity, $_GET['addCity']);
 
-    }else {
+    } else {
         $oldCity = explode('=', $_GET['hiddenCity']);
-        for ($i = 0; $i <= count($oldCity) - 1; $i++) {
+        unset($oldCity[0]);
+        for ($i = 1; $i <= count($oldCity) ; $i++) {
             if ($i % 2 == 0) {
                 continue;
             } else {
                 $allCity[] = $oldCity[$i];
             }
         }
-        array_push($allCity, $_GET['addCity']);
+
+        array_push($allCity, $_GET['addCity'][2]);
+//        de($allCity);
     }
     $urlCity = http_build_query($allCity);
     echo '<form>';
@@ -112,19 +116,45 @@ if (isset($_GET['hiddenCity'])) {
     echo "<input type='text' name='addCity' > ";
     echo "<input type='hidden' name='hiddenCity' value='$urlCity' > ";
     echo '<input type="submit" >';
+
+}
+if (isset($_GET['hiddenCountry']) && isset($_GET['addCity']) && isset($_GET['hiddenCity']) && !empty($_GET['addCountry'])) {
+
+    $allCity = explode('=', $_GET['hiddenCity']);
+    $oldCountry = explode('=', $_GET['hiddenCountry']);
+//    de($allCity);
+    unset($oldCountry[0]);
+    unset($allCity[0]);
+    array_push($oldCountry, $_GET['addCountry']);
+//    de($allCity);
+    $urlCountry = http_build_query($oldCountry);
+    $urlCity = http_build_query($allCity);
+
+    echo '<form>';
+    echo '<label>Страна</label>';
+    echo "<input type='text' name='addCountry' > ";
+    echo "<input type='hidden' name='hiddenCountry' value='$urlCountry'> ";
+    echo '<input type="submit" >';
+    echo '<br>';
+    for ($i = 1; $i <= count($oldCountry); $i++) {
+        echo $oldCountry[$i] . '<br>';
+        if (isset($allCity[$i])){
+            echo $allCity[$i] . '<br>';
+        }
+        echo '<label>Город</label>';
+        echo "<input type='text' name='addCity[$i]' > ";
+        echo "<input type='hidden' name='hiddenCity' value='$urlCity' > ";
+        echo '<input type="submit" >';
+        echo '<hr>';
+//        de($_GET);
+    }
 }
 if (isset($_GET['hiddenCountry']) && empty($_GET['city']) && empty($_GET['hiddenCity'])) {
     $newCountry = $_GET['addCountry'];
     $oldCountry = explode('&', $_GET['hiddenCountry']);
-
     $allStringCountry = [];
     $allCountry = [];
-
-    for ($i = 0; $i <= count($oldCountry) - 1; $i++) {
-
-        $allStringCountry[] = $oldCountry[$i];
-    }
-    foreach ($allStringCountry as $k => $v) {
+    foreach ($oldCountry as $k => $v) {
         $country = explode('=', $v);
         echo $country[1];
         echo '<br>';
@@ -137,6 +167,7 @@ if (isset($_GET['hiddenCountry']) && empty($_GET['city']) && empty($_GET['hidden
 
         $allCountry[] = $country[1];
     }
+    de($allCountry);
     echo $newCountry . '<br>';
     echo '<br>';
     echo '<label>Город</label>';
