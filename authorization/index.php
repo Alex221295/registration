@@ -11,6 +11,7 @@ echo '
 </form>
 ';
 if (!empty($_GET)) {
+
     $sql = "SELECT * FROM user";
     $result = $conn->query($sql);
     $userEmail = '';

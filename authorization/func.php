@@ -5,4 +5,5 @@ function de($data)
     var_dump($data);
     echo '</pre>';
     exit();
+
 }

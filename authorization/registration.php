@@ -33,6 +33,7 @@ if (isset($_GET['name']) && isset($_GET['surename']) && isset($_GET['email']) &&
         echo "Такой пользователь существует";
     } else {
         $sql = "INSERT INTO user (name,surname,email,password,role) VALUES ('" . $_GET['name'] . "',
+       
            '" . $_GET['surename'] . "','" . $_GET['email'] . "','" . $_GET['password'] . "','user')";
         $result = $conn->query($sql);
         if ($result) {

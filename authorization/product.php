@@ -6,7 +6,7 @@ echo '<form>
 <a href="category.php">назад</a>
 <br>
 <input type="text" name="addProduct">
-<input type="hidden" name="category_id" value="'.$_GET['category_id'].'">
+<input type="hidden" name="category_id" value="' .$_GET['category_id'].'">
 <input type="submit" >
 </form>';
 if (isset($_GET['addProduct'])){
@@ -17,6 +17,7 @@ if (isset($_GET['addProduct'])){
     }
 
 }
+
 $sql = "SELECT name FROM product WHERE category_id=".$_GET['category_id'];
 $result = $conn->query($sql);
 foreach ($result->fetch_all(MYSQLI_ASSOC) as $v){
