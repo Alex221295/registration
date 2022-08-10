@@ -1,6 +1,6 @@
 <?php
 include_once 'db.php';
-include_once 'func.php.php';
+include_once 'func.php';
 //de($_GET);
 echo '<form>
 <a href="category.php">назад</a>
