@@ -40,7 +40,7 @@ if (isset($_GET['name']) && isset($_GET['surename']) && isset($_GET['email']) &&
             $id = $conn->insert_id;
 //            de($id);
 //            echo 'регистрация прошла успешно';
-            header('Location:http://localhost:8888/authorization/category.php?id='.$id);
+            header('Location:http://localhost:8888/authorization/category.php?id=' . $id);
         }
     }
 

@@ -26,13 +26,13 @@ if (!empty($_GET)) {
             $userEmail = $_GET['email'];
             if ($email['password'] !== $_GET['password']) {
                 echo 'не верный пароль';
-            }else{
+            } else {
                 $id = $email['id'];
-                header('Location:http://localhost:8888/authorization/category.php?id='.$id);
+                header('Location:http://localhost:8888/authorization/category.php?id=' . $id);
             }
         }
     }
-    if (empty($userEmail)){
+    if (empty($userEmail)) {
         echo 'такого пользователя не существует,пройдите регистрацию!';
     }
 }

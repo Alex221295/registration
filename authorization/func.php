@@ -12,6 +12,7 @@ function de($data)
     exit();
 
 }
+
 function select($tableName, $column, $params = [])
 {
     global $conn;
@@ -21,28 +22,30 @@ function select($tableName, $column, $params = [])
         foreach ($params as $key => $value) {
             $sql .= " $key = $value and";
         }
-        $sql = substr($sql,0,-3);
+        $sql = substr($sql, 0, -3);
     }
     $result = $conn->query($sql);
     $result = $result->fetch_all(MYSQLI_ASSOC);
     return $result;
 }
-function insert($tableName,$params){
+
+function insert($tableName, $params)
+{
     global $conn;
     $sql = "INSERT INTO $tableName (";
-    foreach ($params as $column=>$value){
-        $sql.=$column.',';
+    foreach ($params as $column => $value) {
+        $sql .= $column . ',';
     }
-    $sql = substr($sql,0,-1);
-    $sql .=') VALUES ("';
-    foreach ($params as $value){
-        $sql.=$value.',';
+    $sql = substr($sql, 0, -1);
+    $sql .= ') VALUES ("';
+    foreach ($params as $value) {
+        $sql .= $value . ',';
     }
-    $sql = substr($sql,0,-1);
-    $sql .='")';
+    $sql = substr($sql, 0, -1);
+    $sql .= '")';
     $result = $conn->query($sql);
     if ($result) {
-       return $result;
+        return $result;
     }
 
 }
