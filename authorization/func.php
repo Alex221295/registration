@@ -37,17 +37,44 @@ function insert($tableName, $params)
         $sql .= $column . ',';
     }
     $sql = substr($sql, 0, -1);
-    $sql .= ') VALUES ("';
+    $sql .= ') VALUES (';
     foreach ($params as $value) {
-        $sql .= $value . ',';
+        $sql .= '"'.$value . '",';
     }
     $sql = substr($sql, 0, -1);
-    $sql .= '")';
+    $sql .= ')';
     $result = $conn->query($sql);
     if ($result) {
         return $result;
+    }else{
+        de('Ошибка в скрипте');
     }
+    return true;
 }
+
+function update($tableName, $params, $conditional)
+{
+    global $conn;
+    $sql = "UPDATE $tableName SET ";
+    foreach ($params as $column => $value) {
+        $sql .= "$column = '$value' ,";
+    }
+    $sql = substr($sql, 0, -1);
+    $sql .= " WHERE ";
+    foreach ($conditional as $key => $value) {
+        $sql .= "$key = $value and";
+    }
+    $sql = substr($sql, 0, -3);
+    $result = $conn->query($sql);
+    if ($result) {
+        return $result;
+    }else{
+        de('Ошибка в скрипте');
+    }
+    return true;
+
+}
+
 
 
 

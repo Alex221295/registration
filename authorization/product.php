@@ -9,16 +9,17 @@ echo '<form>
 <input type="submit" >
 </form>';
 if (isset($_GET['addProduct'])) {
-    $sql = 'INSERT INTO product (name,category_id) VALUES (\'' . $_GET['addProduct'] . '\',\'' . $_GET['category_id'] . '\')';
-    $result = $conn->query($sql);
-    if ($result) {
-        header('Location:http://localhost:8888/category_product/product.php?category_id=' . $_GET['category_id']);
+    $params['name'] = $_GET['addProduct'];
+    $params['category_id'] = $_GET['category_id'];
+    if (insert('product',(array) $params)) {
+        header('Location:http://localhost:8888/authorization/product.php?category_id=' . $_GET['category_id']);
     }
 
 }
+$params['category_id'] = $_GET['category_id'];
 
-$sql = "SELECT name FROM product WHERE category_id=" . $_GET['category_id'];
-$result = $conn->query($sql);
-foreach ($result->fetch_all(MYSQLI_ASSOC) as $v) {
-    echo $v['name'] . '<br>';
+//$sql = "SELECT name FROM product WHERE category_id=" . $_GET['category_id'];
+//$result = $conn->query($sql);
+foreach (select('product','name',(array)$params) as $v) {
+    echo $v['name']  . '<a href = #>   обновить</a>'. '<br>';
 }

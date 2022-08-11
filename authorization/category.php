@@ -21,7 +21,15 @@ if (isset($_GET['addCategory'])) {
     }
 }
 
+if (!empty($_GET['update'])){
+    $paramsForUpdate['name'] = $_GET['update'];
+    $conditional['id'] = $_GET['category_id'];
+    update('category',$paramsForUpdate,$conditional);
+}
+
 $result = select('category','*');
 foreach ($result as $v) {
-    echo "<a href='/authorization/product.php?category_id=" . $v['id'] . "'>" . $v['name'] . '<br>' . "'</a>'";
+    echo "<a href='/authorization/product.php?category_id=" . $v['id'] . "'>" . $v['name']  . '</a>';
+    echo "<a href='/authorization/update.php?category_id=" . $v['id'] . "&id=".$_GET['id']."&name=".$v['name']."'> обновить</a>";
+    echo '<br>';
 }
