@@ -47,7 +47,6 @@ function insert($tableName, $params)
     if ($result) {
         return $result;
     }
-
 }
 
 

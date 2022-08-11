@@ -21,11 +21,7 @@ if (isset($_GET['addCategory'])) {
     }
 }
 
-$sql = "SELECT * FROM category";
-$result = $conn->query($sql);
-$result = $result->fetch_all(MYSQLI_ASSOC);
-//de($result);
+$result = select('category','*');
 foreach ($result as $v) {
-//    echo "<a href='/category_product/index.php?category=1'>1</a>";
     echo "<a href='/authorization/product.php?category_id=" . $v['id'] . "'>" . $v['name'] . '<br>' . "'</a>'";
 }
