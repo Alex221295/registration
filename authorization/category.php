@@ -26,10 +26,13 @@ if (!empty($_GET['update'])){
     $conditional['id'] = $_GET['category_id'];
     update('category',$paramsForUpdate,$conditional);
 }
-
+if (isset($_GET['delete'])){
+    delete($_GET['tableName'],$_GET['category_id']);
+}
 $result = select('category','*');
 foreach ($result as $v) {
-    echo "<a href='/authorization/product.php?category_id=" . $v['id'] . "'>" . $v['name']  . '</a>';
-    echo "<a href='/authorization/update.php?category_id=" . $v['id'] . "&id=".$_GET['id']."&name=".$v['name']."'> обновить</a>";
+    echo "<a href='/authorization/product.php?category_id=" . $v['id'] . "'>" . $v['name']  . "</a>";
+    echo "<a href='/authorization/update.php?category_id=" . $v['id'] . "&id=".$_GET['id']."&name=".$v['name']."&tableName=category'> обновить</a>";
+    echo "<a href='/authorization/category.php?delete&category_id=" . $v['id'] . "&tableName=category&id=".$_GET['id']."'>X</a>";
     echo '<br>';
 }

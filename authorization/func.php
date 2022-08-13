@@ -74,6 +74,17 @@ function update($tableName, $params, $conditional)
     return true;
 
 }
+function delete($tableName,$id){
+    global $conn;
+    $sql = "DELETE FROM $tableName WHERE id = $id";
+    $result = $conn->query($sql);
+    if ($result) {
+        return $result;
+    }else{
+        de('Ошибка в скрипте');
+    }
+    return true;
+}
 
 
 

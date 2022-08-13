@@ -14,12 +14,19 @@ if (isset($_GET['addProduct'])) {
     if (insert('product',(array) $params)) {
         header('Location:http://localhost:8888/authorization/product.php?category_id=' . $_GET['category_id']);
     }
-
 }
 $params['category_id'] = $_GET['category_id'];
-
-//$sql = "SELECT name FROM product WHERE category_id=" . $_GET['category_id'];
-//$result = $conn->query($sql);
-foreach (select('product','name',(array)$params) as $v) {
-    echo $v['name']  . '<a href = #>   обновить</a>'. '<br>';
+if (!empty($_GET['update'])){
+    $paramsForUpdate['name'] = $_GET['update'];
+    $conditional['id'] = $_GET['category_id'];
+    update('product',$paramsForUpdate,$conditional);
+}
+if (isset($_GET['delete'])){
+    delete($_GET['tableName'],$_GET['id']);
+}
+foreach (select('product','*',(array)$params) as $v) {
+    echo $v['name'] ;
+    echo "<a href='/authorization/update.php?category_id=" . $v['id'] . "&id=".$v['category_id']."&name=".$v['name']."&tableName=product'> обновить</a>";
+    echo "<a href='/authorization/product.php?delete&category_id=" . $_GET['category_id'] . "&tableName=product&id=".$v['id']."'>X</a>";
+    echo '<br>';
 }
