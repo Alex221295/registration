@@ -1,9 +1,10 @@
 <?php
+
 set_time_limit(60);
 ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
-
+include_once "db.php";
 function de($data)
 {
     echo '<pre>';
@@ -13,7 +14,7 @@ function de($data)
 
 }
 
-function select($tableName, $column, $params = [])
+function select(string $tableName, string $column, array $params = [] ) : array
 {
     global $conn;
     $sql = "SELECT $column FROM $tableName";
@@ -29,7 +30,7 @@ function select($tableName, $column, $params = [])
     return $result;
 }
 
-function insert($tableName, $params)
+function insert( string $tableName, array $params) : int
 {
     global $conn;
     $sql = "INSERT INTO $tableName (";
@@ -37,22 +38,13 @@ function insert($tableName, $params)
         $sql .= $column . ',';
     }
     $sql = substr($sql, 0, -1);
-    $sql .= ') VALUES (';
-    foreach ($params as $value) {
-        $sql .= '"'.$value . '",';
-    }
-    $sql = substr($sql, 0, -1);
-    $sql .= ')';
+    $sql .= ') VALUES (\''.implode('\',\'',$params).'\')';
     $result = $conn->query($sql);
-    if ($result) {
-        return $result;
-    }else{
-        de('Ошибка в скрипте');
-    }
-    return true;
+    $lastId = $conn->insert_id;
+    return $lastId;
 }
 
-function update($tableName, $params, $conditional)
+function update(string $tableName, array $params, array $conditional) : bool
 {
     global $conn;
     $sql = "UPDATE $tableName SET ";
@@ -66,24 +58,19 @@ function update($tableName, $params, $conditional)
     }
     $sql = substr($sql, 0, -3);
     $result = $conn->query($sql);
-    if ($result) {
-        return $result;
-    }else{
-        de('Ошибка в скрипте');
-    }
-    return true;
+    return $result;
 
 }
-function delete($tableName,$id){
+function delete(string $tableName,array $conditional) : bool
+{
     global $conn;
-    $sql = "DELETE FROM $tableName WHERE id = $id";
-    $result = $conn->query($sql);
-    if ($result) {
-        return $result;
-    }else{
-        de('Ошибка в скрипте');
+    $sql = "DELETE FROM $tableName WHERE"; // несколько параметров
+    foreach ($conditional as $column=>$value){
+        $sql.= " $column = $value and";
     }
-    return true;
+    $sql = substr($sql,0,-3);
+    $result = $conn->query($sql);
+    return $result;
 }
 
 

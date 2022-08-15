@@ -11,22 +11,41 @@ echo '<form>
 if (isset($_GET['addProduct'])) {
     $params['name'] = $_GET['addProduct'];
     $params['category_id'] = $_GET['category_id'];
-    if (insert('product',(array) $params)) {
+    try {
+        insert('product', $params);
         header('Location:http://localhost:8888/authorization/product.php?category_id=' . $_GET['category_id']);
+    }catch (TypeError $exception){
+        echo "не правельный возврат данных в методе insert".$exception->getLine();
     }
 }
 $params['category_id'] = $_GET['category_id'];
 if (!empty($_GET['update'])){
     $paramsForUpdate['name'] = $_GET['update'];
-    $conditional['id'] = $_GET['category_id'];
-    update('product',$paramsForUpdate,$conditional);
+    $conditional['id'] = $_GET['id'];
+    try {
+        update('product',$paramsForUpdate,$conditional);
+    }catch (TypeError $exception){
+        echo "не правельный тип данных в методе update".$exception->getLine();
+    }
 }
 if (isset($_GET['delete'])){
-    delete($_GET['tableName'],$_GET['id']);
+    $paramsForDelete['id'] = $_GET['id'];
+    try {
+        delete($_GET['tableName'],$paramsForDelete);
+    }catch (TypeError $exception){
+        echo "не правельный тип данных в методе delete ".$exception->getFile();
+        echo " строка: ".$exception->getLine();
+        echo '<br>';
+    }
 }
-foreach (select('product','*',(array)$params) as $v) {
+try {
+    $result = select('product','*',$params);
+}catch (TypeError $exception){
+    echo "не правельный возврат данных в методе select".$exception->getLine();
+}
+foreach ($result as $v) {
     echo $v['name'] ;
-    echo "<a href='/authorization/update.php?category_id=" . $v['id'] . "&id=".$v['category_id']."&name=".$v['name']."&tableName=product'> обновить</a>";
+    echo "<a href='/authorization/update.php?category_id=" . $v['category_id'] . "&id=".$v['id']."&name=".$v['name']."&tableName=product'> обновить</a>";
     echo "<a href='/authorization/product.php?delete&category_id=" . $_GET['category_id'] . "&tableName=product&id=".$v['id']."'>X</a>";
     echo '<br>';
 }

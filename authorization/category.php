@@ -16,20 +16,39 @@ foreach ($roleForUser as $role) {
 }
 if (isset($_GET['addCategory'])) {
     $paramsForInsert['name'] = $_GET['addCategory'];
-    if (insert('category', $paramsForInsert)) {
+    try {
+        insert('category', $paramsForInsert);
         header('Location:http://localhost:8888/authorization/category.php?id=' . $_GET['id']);
+
+    }catch (TypeError $exception){
+        echo "не правельный возврат данных в методе insert".$exception->getLine();
     }
+
 }
 
 if (!empty($_GET['update'])){
     $paramsForUpdate['name'] = $_GET['update'];
     $conditional['id'] = $_GET['category_id'];
-    update('category',$paramsForUpdate,$conditional);
+    try {
+        update('category',$paramsForUpdate,$conditional);
+    }catch (TypeError $exception){
+        echo "не правельный возврат данных в методе select".$exception->getLine();
+    }
 }
 if (isset($_GET['delete'])){
-    delete($_GET['tableName'],$_GET['category_id']);
+    $paramsForDelete['id'] = $_GET['category_id'];
+    delete($_GET['tableName'],$paramsForDelete);
+    try {
+        delete($_GET['tableName'],$paramsForDelete);
+    }catch (TypeError $exception){
+        echo "не правельный возврат данных в методе delete".$exception->getLine();
+    }
 }
-$result = select('category','*');
+try {
+    $result = select('category','*');
+}catch (TypeError $exception){
+    echo "не правельный возврат данных в методе select".$exception->getLine();
+}
 foreach ($result as $v) {
     echo "<a href='/authorization/product.php?category_id=" . $v['id'] . "'>" . $v['name']  . "</a>";
     echo "<a href='/authorization/update.php?category_id=" . $v['id'] . "&id=".$_GET['id']."&name=".$v['name']."&tableName=category'> обновить</a>";
