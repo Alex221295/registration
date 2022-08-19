@@ -1,6 +1,9 @@
 <?php
 include_once 'db.php';
 include_once 'func.php';
+session_start();
+echo "<a href = 'logout.php'>выйти</a>  <br>";
+if (isset($_SESSION['token']) && !empty($_SESSION['token'])){
 echo '<form>
 <a href="category.php">назад</a>
 <br>
@@ -48,4 +51,7 @@ foreach ($result as $v) {
     echo "<a href='/authorization/update.php?category_id=" . $v['category_id'] . "&id=".$v['id']."&name=".$v['name']."&tableName=product'> обновить</a>";
     echo "<a href='/authorization/product.php?delete&category_id=" . $_GET['category_id'] . "&tableName=product&id=".$v['id']."'>X</a>";
     echo '<br>';
+}
+}else{
+    header('Location:http://localhost:8888/authorization/');
 }

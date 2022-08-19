@@ -21,7 +21,7 @@ function select(string $tableName, string $column, array $params = [] ) : array
     if (!empty($params)) {
         $sql .= " WHERE";
         foreach ($params as $key => $value) {
-            $sql .= " $key = $value and";
+            $sql .= " $key = '$value' and";
         }
         $sql = substr($sql, 0, -3);
     }
@@ -30,7 +30,7 @@ function select(string $tableName, string $column, array $params = [] ) : array
     return $result;
 }
 
-function insert( string $tableName, array $params) : int
+function insert( string $tableName, array $params) : bool
 {
     global $conn;
     $sql = "INSERT INTO $tableName (";
@@ -40,8 +40,7 @@ function insert( string $tableName, array $params) : int
     $sql = substr($sql, 0, -1);
     $sql .= ') VALUES (\''.implode('\',\'',$params).'\')';
     $result = $conn->query($sql);
-    $lastId = $conn->insert_id;
-    return $lastId;
+    return $result;
 }
 
 function update(string $tableName, array $params, array $conditional) : bool
